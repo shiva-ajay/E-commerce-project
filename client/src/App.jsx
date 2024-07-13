@@ -1,8 +1,12 @@
 import React from 'react'
-
+import { Route, Routes } from "react-router-dom";
+import {LoginPage, SignupPage} from './Routes.js'
 const App = () => {
   return (
-    <div className='ml-10'>App</div>
+    <Routes>
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='/sign-up' element={<SignupPage />} />
+    </Routes>
   )
 }
 
