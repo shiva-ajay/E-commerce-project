@@ -4,13 +4,20 @@ import jwt from "jsonwebtoken";
 import sendMail from "../utils/sendMail.js";
 import sendToken from "../utils/jwtToken.js";
 
+// Create activation token
+const createActivationToken = (user) => {
+  return jwt.sign(user, process.env.ACTIVATION_SECRET, {
+    expiresIn: "5m",
+  });
+};
+
 export const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     let avatarData = {};
@@ -33,7 +40,6 @@ export const createUser = async (req, res, next) => {
 
     console.log("Creating user with data:", user);
 
-
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
 
@@ -49,27 +55,55 @@ export const createUser = async (req, res, next) => {
       });
     } catch (error) {
       console.error("Email sending error:", error);
-      res.status(500).json({ error: "Email could not be sent" });
+      res.status(500).json({ message: "Email could not be sent" });
     }
   } catch (error) {
     console.error("User creation error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Create activation token
-const createActivationToken = (user) => {
-  return jwt.sign(user, process.env.ACTIVATION_SECRET, {
-    expiresIn: "5m",
-  });
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Please provide all fields!" });
+    }
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(400).json({ message: "User doesn't exist!" });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Please provide the correct information" });
+    }
+
+    sendToken(user, 201, res);
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: error.message });
+  }
 };
 
 
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
 
-// Login
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
 
-
-export const loginUser = ()=>{
-
-}
-
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

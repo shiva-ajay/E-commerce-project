@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ActivationPage, LoginPage, SignupPage } from "./Routes.js";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Store from "./redux/store.js";
+import { loadUser } from "./redux/actions/user.js";
 
 const App = () => {
+  useEffect(() => {
+    Store.dispatch(loadUser());
+  }, []);
   return (
     <>
-    <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -19,11 +24,14 @@ const App = () => {
         pauseOnHover
         theme="dark"
       />
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/sign-up" element={<SignupPage />} />
-      <Route path="/activation/:activation_token" element={<ActivationPage />} />
-    </Routes>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/sign-up" element={<SignupPage />} />
+        <Route
+          path="/activation/:activation_token"
+          element={<ActivationPage />}
+        />
+      </Routes>
     </>
   );
 };

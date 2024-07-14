@@ -10,7 +10,12 @@ import userRoute from './routes/userRoute.js'
 const app = express();
 const port = process.env.PORT || 8000;
 
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:5173', // Your frontend's origin
+    credentials: true, // Enable credentials
+  };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
