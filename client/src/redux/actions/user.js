@@ -15,9 +15,14 @@ export const loadUser = () => async (dispatch) => {
       payload: data.user,
     });
   } catch (error) {
+    // Check if error.response is defined
+    const errorMessage = error.response && error.response.data && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+
     dispatch({
       type: "LoadUserFail",
-      payload: error.response.data.message,
+      payload: errorMessage,
     });
   }
 };

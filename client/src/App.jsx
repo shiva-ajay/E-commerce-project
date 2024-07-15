@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { ActivationPage, LoginPage, SignupPage } from "./Routes.js";
+import { ActivationPage, HomePage, LoginPage, SignupPage } from "./Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store.js";
@@ -25,6 +25,7 @@ const App = () => {
         theme="dark"
       />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignupPage />} />
         <Route

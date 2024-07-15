@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
-import { server } from "../server";
+import { server } from "../../server";
 import { toast } from "react-toastify";
 
 
