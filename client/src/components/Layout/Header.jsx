@@ -14,6 +14,7 @@ import styles from "../../styles/styles.js";
 import DropDown from "./DropDown.jsx";
 
 const Header = ({ activeHeading }) => {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
