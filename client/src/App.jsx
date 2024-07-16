@@ -5,13 +5,23 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store.js";
 import { loadUser } from "./redux/actions/user.js";
+import { useSelector } from "react-redux";
 
 const App = () => {
+
+  const { loading } = useSelector((state) => state.user);
+
+
   useEffect(() => {
     Store.dispatch(loadUser());
   }, []);
   return (
     <>
+    {
+      loading ? (
+        null
+      ) : (
+        <>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -34,6 +44,9 @@ const App = () => {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FAQPage />} />
       </Routes>
+    </>
+      )
+    }
     </>
   );
 };
