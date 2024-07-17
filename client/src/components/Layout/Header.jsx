@@ -23,6 +23,7 @@ const Header = ({ activeHeading }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
 
+
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);

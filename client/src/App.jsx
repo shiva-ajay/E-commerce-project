@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { ActivationPage, HomePage, LoginPage, ProductsPage, SignupPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage } from "./Routes.js";
+import { ActivationPage, HomePage, LoginPage, ProductsPage, SignupPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage, ProfilePage } from "./Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Store from "./redux/store.js";
-import { loadUser } from "./redux/actions/user.js";
+import Store from "./redux/store";
+import { loadUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
+import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
 
-  const { loading } = useSelector((state) => state.user);
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
 
 
   useEffect(() => {
@@ -44,6 +45,10 @@ const App = () => {
         <Route path="/best-selling" element={<BestSellingPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FAQPage />} />
+        <Route path="/profile" element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} >
+            <ProfilePage />
+        </ProtectedRoute>} />
       </Routes>
     </>
       )
