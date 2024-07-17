@@ -5,6 +5,7 @@ import express from 'express';
 import connectDB from './db/Database.js';
 import cookieParser from "cookie-parser";
 import userRoute from './routes/userRoute.js'
+import shopRoute from './routes/shopRoute.js'
 
 
 const app = express();
@@ -24,6 +25,8 @@ app.use("/", express.static("uploads"));
 connectDB();
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/shop", shopRoute);
+
 
 app.get('/', (req, res) => {
     res.send("API Working");

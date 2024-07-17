@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import {
   ActivationPage,
   HomePage,
@@ -14,23 +14,34 @@ import {
   CheckoutPage,
   PaymentPage,
   OrderSuccessPage,
+  ShopCreatePage,
+  SellerActivationPage,
+  ShopLoginPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
-import { loadUser } from "./redux/actions/user";
+import { loadSeller, loadUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
+
+  const navigate = useNavigate();
+
   const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { isSeller, isLoading } = useSelector((state) => state.seller)
 
   useEffect(() => {
     Store.dispatch(loadUser());
+    Store.dispatch(loadSeller());
+
   }, []);
+
+
   return (
     <>
-      {loading ? null : (
+      {loading || isLoading ? null : (
         <>
           <ToastContainer
             position="top-right"
@@ -52,6 +63,10 @@ const App = () => {
               path="/activation/:activation_token"
               element={<ActivationPage />}
             />
+            <Route
+              path="/shop/activation/:activation_token"
+              element={<SellerActivationPage />}
+            />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/product/:name" element={<ProductDetailsPage />} />
             <Route path="/best-selling" element={<BestSellingPage />} />
@@ -66,7 +81,7 @@ const App = () => {
               }
             />
             <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/order/success/:id" element={<OrderSuccessPage />} />
+            <Route path="/order/success" element={<OrderSuccessPage />} />
             <Route
               path="/profile"
               element={
@@ -75,6 +90,8 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/shop-create" element={<ShopCreatePage />} />
+            <Route path="/shop-login" element={<ShopLoginPage />} />
           </Routes>
         </>
       )}

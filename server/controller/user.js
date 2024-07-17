@@ -38,7 +38,7 @@ export const createUser = async (req, res, next) => {
       avatar: avatarData,
     };
 
-    console.log("Creating user with data:", user);
+    console.log("Creating user controller with data:", user);
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
@@ -80,7 +80,7 @@ export const loginUser = async (req, res, next) => {
     const isPasswordValid = await user.comparePassword(password);
 
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Please provide the correct information" });
+      return res.status(400).json({ message: "User doesn't exist!" });
     }
 
     sendToken(user, 201, res);
