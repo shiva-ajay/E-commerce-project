@@ -22,15 +22,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
-import { useSelector } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute";
+import { ShopDashboardPage, ShopHomePage } from "./routes/ShopRoutes.js";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx"
 
 const App = () => {
 
   const navigate = useNavigate();
 
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
-  const { isSeller, isLoading } = useSelector((state) => state.seller)
 
   useEffect(() => {
     Store.dispatch(loadUser());
@@ -40,8 +39,6 @@ const App = () => {
 
 
   return (
-    <>
-      {loading || isLoading ? null : (
         <>
           <ToastContainer
             position="top-right"
@@ -75,7 +72,7 @@ const App = () => {
             <Route
               path="/checkout"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute >
                   <CheckoutPage />
                 </ProtectedRoute>
               }
@@ -85,17 +82,30 @@ const App = () => {
             <Route
               path="/profile"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute >
                   <ProfilePage />
                 </ProtectedRoute>
               }
             />
-            <Route path="/shop-create" element={<ShopCreatePage />} />
-            <Route path="/shop-login" element={<ShopLoginPage />} />
+           {/* shop Routes */}
+        <Route path="/shop-create" element={<ShopCreatePage />} />
+        <Route path="/shop-login" element={<ShopLoginPage />} />
+        <Route
+          path="/shop/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopHomePage />
+            </SellerProtectedRoute>
+          } />
+        <Route
+          path="/dashboard"
+          element={
+            <SellerProtectedRoute>
+              <ShopDashboardPage />
+            </SellerProtectedRoute>
+          } />
           </Routes>
         </>
-      )}
-    </>
   );
 };
 
