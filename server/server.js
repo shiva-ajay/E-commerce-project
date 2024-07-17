@@ -6,6 +6,7 @@ import connectDB from './db/Database.js';
 import cookieParser from "cookie-parser";
 import userRoute from './routes/userRoute.js'
 import shopRoute from './routes/shopRoute.js'
+import productRoute from './routes/productRoute.js'
 
 
 const app = express();
@@ -26,6 +27,7 @@ connectDB();
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/shop", shopRoute);
+app.use("/api/v1/product", productRoute);
 
 
 app.get('/', (req, res) => {
