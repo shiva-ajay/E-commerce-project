@@ -12,6 +12,8 @@ import {
   ProductDetailsPage,
   ProfilePage,
   CheckoutPage,
+  PaymentPage,
+  OrderSuccessPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -63,7 +65,8 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/order/success/:id" element={<OrderSuccessPage />} />
             <Route
               path="/profile"
               element={
