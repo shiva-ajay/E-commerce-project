@@ -7,21 +7,23 @@ export const createProduct = async (req, res) => {
     const shop = await Shop.findById(shopId);
     if (!shop) {
       return res.status(400).json({ message: "Shop Id is invalid!" });
-    } else {
-      const files = req.files;
-      const imageUrls = files.map((file) => `$(file.fileName)`);
-
-      const productData = req.body;
-      productData.images = imageUrls;
-      productData.shop = shop;
-
-      const product = await Product.create(productData);
-
-      res.status(201).json({
-        success: true,
-        product,
-      });
     }
+
+    const files = req.files;
+    const imageUrls = files.map((file) => file.filename);
+
+    const productData = {
+      ...req.body,
+      images: imageUrls,
+      shop: shop._id,
+    };
+
+    const product = await Product.create(productData);
+
+    res.status(201).json({
+      success: true,
+      product,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
