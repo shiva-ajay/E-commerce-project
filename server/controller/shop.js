@@ -100,3 +100,22 @@ export const loadShop = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+
+
+// log out from shop
+  export const logOut = async (req, res) => {
+    try {
+      res.cookie("seller_token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+      res.status(201).json({
+        success: true,
+        message: "Log out successful!",
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
