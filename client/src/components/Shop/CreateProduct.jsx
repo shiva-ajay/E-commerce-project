@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import {  useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import {  useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { categoriesData } from '../../static/data';
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { createProduct } from "../../redux/actions/product";
+
 
 const CreateProduct = () => {
 
   const seller = useSelector((state) => state.seller);
   const navigate = useNavigate();
-
-
+  const dispatch = useDispatch();
+  const { success, error } = useSelector((state) => state.products);
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -20,8 +22,47 @@ const CreateProduct = () => {
   const [discountPrice, setDiscountPrice] = useState("");
   const [stock, setStock] = useState("");
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      toast.success("Product created successfully!");
+      navigate("/dashboard");
+      window.location.reload();
+    }
+  }, [dispatch, error, success]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newForm = new FormData();
+
+    images.forEach((image) => {
+      newForm.set("images", image);
+    });
+    newForm.append("name", name);
+    newForm.append("description", description);
+    newForm.append("category", category);
+    newForm.append("tags", tags);
+    newForm.append("originalPrice", originalPrice);
+    newForm.append("discountPrice", discountPrice);
+    newForm.append("stock", stock);
+    newForm.append("shopId", seller._id);
+    dispatch(
+      createProduct({
+        name,
+        description,
+        category,
+        tags,
+        originalPrice,
+        discountPrice,
+        stock,
+        shopId: seller._id,
+        images,
+      })
+    );
+
   }
 
   const handleImageChange = (e) => {
