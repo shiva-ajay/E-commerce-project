@@ -25,6 +25,22 @@ export const createProduct = async (req, res) => {
       product,
     });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+
+// get all products of a shop
+
+export const allProduct = async (req, res) => {
+  try {
+    const products = await Product.find({ shopId: req.params.id });
+
+    res.status(201).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
 };
