@@ -35,12 +35,39 @@ export const createProduct = async (req, res) => {
 export const allProduct = async (req, res) => {
   try {
     const products = await Product.find({ shopId: req.params.id });
+    console.log("Products found:", products);  // Move this line here
 
     res.status(201).json({
       success: true,
       products,
     });
+ 
   } catch (error) {
+    console.error("Error in allProduct controller:", error);  // Add this line
     return res.status(400).json({ message: error.message });
   }
 };
+
+
+export const deleteProduct = async (req, res) => {
+  try {
+
+    const productId = req.params.id;
+    const product = await Product.findByIdAndDelete(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product is not found with this id" });
+
+    }    
+
+  
+    await product.remove();
+
+    res.status(201).json({
+      success: true,
+      message: "Product Deleted successfully!",
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+}
