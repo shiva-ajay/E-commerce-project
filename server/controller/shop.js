@@ -4,45 +4,56 @@ import sendMail from "../utils/sendMail.js";
 import sendToken from "../utils/jwtToken.js";
 import path from "path";
 import sendShopToken from "../utils/shopToken.js";
+import cloudinary from "cloudinary";
+
+
+// create activation token
+const createActivationToken = (seller) => {
+  return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
+    expiresIn: "5m",
+  });
+};
+
+
 
 export const createShop = async (req, res) => {
   try {
-    const { email, name, password, address, phoneNumber, zipCode } = req.body;
-    const existingShop = await Shop.findOne({ email });
-
-    if (existingShop) {
-      return res.status(400).json({ message: "User already exists" });
+    const { email } = req.body;
+    const sellerEmail = await Shop.findOne({ email });
+    if (sellerEmail) {
+      return res.status(400).json({ message: "User already exist!" });
     }
 
-    let avatarData = {};
-    if (req.file) {
-      const filename = req.file.filename;
-      const fileUrl = path.join("/uploads", filename);
-      avatarData = { public_id: filename, url: fileUrl };
-    }
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+    });
 
-    const newShop = {
-      name,
-      email,
-      password,
-      avatar: avatarData,
-      address,
-      phoneNumber,
-      zipCode,
+
+    const seller = {
+      name: req.body.name,
+      email: email,
+      password: req.body.password,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+      zipCode: req.body.zipCode,
     };
 
-    const activationToken = jwt.sign(newShop, process.env.ACTIVATION_SECRET, { expiresIn: "5m" });
+    const activationToken = createActivationToken(seller);
     const activationUrl = `http://localhost:5173/shop/activation/${activationToken}`;
 
     try {
       await sendMail({
-        email: newShop.email,
+        email: seller.email,
         subject: "Activate your Shop",
-        message: `Hello ${newShop.name}, please click on the link to activate your account: ${activationUrl}`,
+        message: `Hello ${seller.name}, please click on the link to activate your shop: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,
-        message: `Please check your email: ${newShop.email} to activate your account!`,
+        message: `please check your email:- ${seller.email} to activate your shop!`,
       });
     } catch (error) {
       console.error("Email sending error:", error);

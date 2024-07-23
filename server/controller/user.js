@@ -3,6 +3,7 @@ import path from "path";
 import jwt from "jsonwebtoken";
 import sendMail from "../utils/sendMail.js";
 import sendToken from "../utils/jwtToken.js";
+import cloudinary from "cloudinary";
 
 // Create activation token
 const createActivationToken = (user) => {
@@ -11,31 +12,27 @@ const createActivationToken = (user) => {
   });
 };
 
-export const createUser = async (req, res, next) => {
+export const createUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, avatar } = req.body;
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exist!" });
     }
 
-    let avatarData = {};
-
-    if (req.file) {
-      const filename = req.file.filename;
-      const fileUrl = path.join(filename);
-      avatarData = {
-        public_id: filename,
-        url: fileUrl,
-      };
-    }
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "avatars",
+    });
 
     const user = {
-      name,
-      email,
-      password,
-      avatar: avatarData,
+      name: name,
+      email: email,
+      password: password,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
 
     console.log("Creating user controller with data:", user);

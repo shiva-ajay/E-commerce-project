@@ -43,11 +43,11 @@ const ProductDetailsCard = ({setOpen, data}) => {
 
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
-                <img src={`${backend_url}${data.images}`} alt="" />
+              <img src={`${data.images && data.images[0]?.url}`} alt="" />
                 <div className="flex">
-                  
+                  <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
-                      src={`${backend_url}${data.images}`}
+                      src={`${data?.shop?.avatar?.url}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -57,7 +57,7 @@ const ProductDetailsCard = ({setOpen, data}) => {
                       </h3>
                       <h5 className="pb-3 text-[15px]">{data?.ratings} Ratings</h5>
                     </div>
-                  
+                    </Link>
                 </div>
                 <div
                   className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}

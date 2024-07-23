@@ -17,9 +17,9 @@ const ProductCard = ({ data }) => {
       <div className="w-full h-[px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-center">
           <div>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/product/${data._id}`}>
                 <img 
-                  src={`${backend_url}${data.images}`}
+                  src={`${data.images && data.images[0]?.url}`}
                   alt="" 
                   className="w-full h-[170px] object-contain" 
                 />

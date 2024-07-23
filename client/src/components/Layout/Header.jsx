@@ -174,7 +174,7 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <Link to="/profile">
                     <img
-                      src={`${backend_url}${user.avatar.url}`}
+                      src={`${user?.avatar?.url}`}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />
@@ -186,6 +186,7 @@ const Header = ({ activeHeading }) => {
                 )}
               </div>
             </div>
+            
             {/* cart popup */}
             {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
 

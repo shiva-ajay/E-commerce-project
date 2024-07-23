@@ -1,5 +1,5 @@
 import React from 'react'
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import styles from "../../styles/styles";
 import Loader from "../Layout/Loader";
 import { useSelector } from "react-redux";

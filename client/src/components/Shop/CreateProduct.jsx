@@ -34,7 +34,19 @@ const CreateProduct = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+
+    setImages([]);
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSubmit = (e) => {
@@ -43,7 +55,7 @@ const CreateProduct = () => {
     const newForm = new FormData();
 
     images.forEach((image) => {
-      newForm.append("images", image);
+      newForm.set("images", image);
     });
     newForm.append("name", name);
     newForm.append("description", description);
@@ -53,8 +65,19 @@ const CreateProduct = () => {
     newForm.append("discountPrice", discountPrice);
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
-
-    dispatch(createProduct(newForm));
+    dispatch(
+      createProduct({
+        name,
+        description,
+        category,
+        tags,
+        originalPrice,
+        discountPrice,
+        stock,
+        shopId: seller._id,
+        images,
+      })
+    );
   };
 
   return (
@@ -171,6 +194,7 @@ const CreateProduct = () => {
           </label>
           <input
             type="file"
+            name=""
             id="upload"
             className="hidden"
             multiple
@@ -181,21 +205,14 @@ const CreateProduct = () => {
               <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
             </label>
             {images &&
-              images.map((image, index) => {
-                if (image) {
-                  return (
-                    <img
-                      src={URL.createObjectURL(image)}
-                      key={index}
-                      alt=""
-                      className="h-[120px] w-[120px] object-cover m-2"
-                    />
-                  );
-                } else {
-                  console.error("Invalid image:", image);
-                  return null;
-                }
-              })}
+              images.map((i) => (
+                <img
+                  src={i}
+                  key={i}
+                  alt=""
+                  className="h-[120px] w-[120px] object-cover m-2"
+                />
+              ))}
           </div>
           <br />
           <div>

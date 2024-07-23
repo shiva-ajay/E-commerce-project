@@ -1,29 +1,47 @@
 import Product from "../model/product.js";
 import Shop from "../model/shop.js";
+import cloudinary from "cloudinary";
+
 
 export const createProduct = async (req, res) => {
   try {
     const shopId = req.body.shopId;
     const shop = await Shop.findById(shopId);
     if (!shop) {
-      return res.status(400).json({ message: "Shop Id is invalid!" });
+      return res.status(400).json({ message: "Shop ID invalid!!!" });
+    } else {
+      let images = [];
+
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else {
+        images = req.body.images;
+      }
+    
+      const imagesLinks = [];
+    
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: "products",
+        });
+    
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+    
+      const productData = req.body;
+      productData.images = imagesLinks;
+      productData.shop = shop;
+
+      const product = await Product.create(productData);
+
+      res.status(201).json({
+        success: true,
+        product,
+      });
     }
-
-    const files = req.files;
-    const imageUrls = files.map((file) => file.filename);
-
-    const productData = {
-      ...req.body,
-      images: imageUrls,
-      shop: shop._id,
-    };
-
-    const product = await Product.create(productData);
-
-    res.status(201).json({
-      success: true,
-      product,
-    });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
