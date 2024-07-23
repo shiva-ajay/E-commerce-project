@@ -18,7 +18,24 @@ export const userReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.payload;
             state.isAuthenticated = false;
-        });
+        })
+
+  // update user information
+
+         .addCase('updateUserInfoRequest', (state) => {
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase('updateUserInfoSuccess', (state, action) => {
+            state.loading = false;
+            state.user = action.payload;
+          })
+          .addCase('updateUserInfoFailed', (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+          })
+
+
 });
 
 

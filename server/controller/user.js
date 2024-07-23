@@ -120,3 +120,38 @@ export const logout = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 }
+
+// update user info
+
+export const updateUser = async (req, res) => {
+  try {
+    const { email, password, phoneNumber, name } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      
+        return res.status(400).json({ message: "Please provide the correct information" });
+  
+    }
+
+    user.name = name;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
