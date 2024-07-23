@@ -157,7 +157,7 @@ export const updateUser = async (req, res) => {
 }
 
 
-
+// update user avatar
 export const updateAvatar = async (req, res) => {
   try {
     let existsUser = await User.findById(req.user.id);
@@ -189,4 +189,31 @@ export const updateAvatar = async (req, res) => {
 }
 
 
+// update user password
+export const updatePassword = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("+password");
 
+    const isPasswordMatched = await user.comparePassword(
+      req.body.oldPassword
+    );
+
+    if (!isPasswordMatched) {
+      return res.status(400).json({ message: "Old password is incorrect!" });
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return res.status(400).json({ message: "Password doesn't matched with each other!" });
+    }
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully!",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
