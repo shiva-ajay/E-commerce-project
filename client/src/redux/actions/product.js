@@ -74,3 +74,23 @@ export const deleteProduct = (id) => async (dispatch) => {
     });
   }
 };
+
+
+
+export const getAllProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: "getAllProductsRequest" });
+    const { data } = await axios.get(`${server}/product/get-all-products`);
+    console.log('API Response:', data); // Debugging log
+    dispatch({
+      type: "getAllProductsSuccess",
+      payload: data.products,
+    });
+    console.log(data)
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

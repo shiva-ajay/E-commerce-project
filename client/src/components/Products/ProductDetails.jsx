@@ -36,7 +36,7 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={data.image_Url[select].url}
+                  src={`${backend_url}${data.images}`}
                   alt="Selected product image"
                   className="w-[80%]"
                 />
@@ -205,7 +205,7 @@ const ProductDetailsInfo = ({ data }) => {
           <div className="w-full 800px:w-[50%]">
             <div className="flex items-center">
               <img
-                src={data.shop.shop_avatar.url}
+                src={`${data?.shop?.avatar?.url}`}
                 className="w-[50px] h-[50px] rounded-full"
                 alt=""
               />
@@ -218,19 +218,21 @@ const ProductDetailsInfo = ({ data }) => {
             </div>
 
             <p className="pt-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
-              nobis dolor quidem ab, voluptate veniam? Officia pariatur nobis
-              quia ratione accusamus, recusandae architecto illo aliquam,
-              corporis suscipit porro labore aspernatur!
+            {data.shop.description}
             </p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
-              <h5 className="font-[600]">Joined</h5>
+            <h5 className="font-[600]">
+                Joined on:{" "}
+                <span className="font-[500]">
+                  {data.shop?.createdAt?.slice(0, 10)}
+                </span>
+              </h5>
               <h5 className="font-[600] pt-3">
                 Total Products:{" "}
                 <span className="font-[500]">
-                  1,223
+                  {products && products.length}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">

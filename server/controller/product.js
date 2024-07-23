@@ -48,7 +48,7 @@ export const allProduct = async (req, res) => {
   }
 };
 
-
+//deleteProduct
 export const deleteProduct = async (req, res) => {
   try {
 
@@ -71,3 +71,19 @@ export const deleteProduct = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 }
+
+
+// get all products
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
