@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/styles";
-import { backend_url } from "../../server";
+import { backend_url, server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineArrowRight, AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
@@ -55,7 +55,7 @@ const ProfileContent = ({ active }) => {
               withCredentials: true,
             }
           )
-          .then((response) => {
+          .then((res) => {
             dispatch(loadUser());
             toast.success("avatar updated successfully!");
           })

@@ -155,3 +155,38 @@ export const updateUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 }
+
+
+
+export const updateAvatar = async (req, res) => {
+  try {
+    let existsUser = await User.findById(req.user.id);
+    if (req.body.avatar !== "") {
+      const imageId = existsUser.avatar.public_id;
+
+      await cloudinary.v2.uploader.destroy(imageId);
+
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+      });
+
+      existsUser.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    }
+
+    await existsUser.save();
+
+    res.status(200).json({
+      success: true,
+      user: existsUser,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+
+
