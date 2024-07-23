@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { getAllProductsShop } from "../../redux/actions/product";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
@@ -15,8 +16,11 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch (getAllProductsShop(data && data?.shop._id));
+  }, [dispatch, data]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -165,7 +169,7 @@ const ProductDetails = ({ data }) => {
 };
 
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
 
   return (
@@ -257,7 +261,7 @@ const ProductDetailsInfo = ({ data }) => {
               <h5 className="font-[600] pt-3">
                 Total Products:{" "}
                 <span className="font-[500]">
-                  {products && products.length}
+                {products && products.length}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">

@@ -130,3 +130,19 @@ export const loadShop = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   }
+
+
+
+  // getShopInfo
+
+  export const getShopInfo = async (req, res) => {
+    try {
+      const shop = await Shop.findById(req.params.id);
+      res.status(201).json({
+        success: true,
+        shop,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }

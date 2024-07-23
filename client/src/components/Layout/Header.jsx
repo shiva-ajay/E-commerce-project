@@ -15,7 +15,7 @@ import Cart from "../Cart/Cart.jsx";
 import Wishlist from "../Wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
 
-const Header = ({ activeHeading }) => { 
+const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -24,15 +24,15 @@ const Header = ({ activeHeading }) => {
   const [openCart, setOpenCart] = useState(false);
   const [open, setOpen] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
-
+  const { allProducts } = useSelector((state) => state.products);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
     const filteredProducts =
-      productData &&
-      productData.filter((product) =>
+      allProducts &&
+      allProducts.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filteredProducts);
@@ -75,19 +75,16 @@ const Header = ({ activeHeading }) => {
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
-                    const d = i.name;
-
-                      const Product_name = d.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${Product_name}`} key={index}>
-                        <div className="flex items-center">
-                            <img
-                              src={i.image_Url[0]?.url}
-                              alt=""
-                              className="w-[50px] mr-2"
-                            />
-                            <h5>{i.name}</h5>
-                          </div>
+                      <Link to={`/product/${i._id}`}>
+                        <div className="w-full flex items-start-py-3">
+                          <img
+                            src={`${i.images[0]?.url}`}
+                            alt=""
+                            className="w-[40px] h-[40px] mr-[10px]"
+                          />
+                          <h1>{i.name}</h1>
+                        </div>
                       </Link>
                     );
                   })}
@@ -186,7 +183,7 @@ const Header = ({ activeHeading }) => {
                 )}
               </div>
             </div>
-            
+
             {/* cart popup */}
             {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
 
@@ -198,8 +195,8 @@ const Header = ({ activeHeading }) => {
         </div>
       </div>
 
-       {/* mobile header */}
-       <div
+      {/* mobile header */}
+      <div
         className={`${
           active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
         }
@@ -235,9 +232,14 @@ const Header = ({ activeHeading }) => {
           </div>
         </div>
 
+        {/* cart popup */}
+        {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
 
-         {/* header sidebar */}
-         {open && (
+        {/* wishlist popup */}
+        {openWishlist ? <Wishlist setOpenWishlist={setOpenWishlist} /> : null}
+
+        {/* header sidebar */}
+        {open && (
           <div
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
@@ -279,7 +281,7 @@ const Header = ({ activeHeading }) => {
                         <Link to={`/product/${Product_name}`}>
                           <div className="flex items-center">
                             <img
-                              src={i.image_Url[0]?.url}
+                              src={`${i.images[0]?.url}`}
                               alt=""
                               className="w-[50px] mr-2"
                             />
@@ -310,7 +312,7 @@ const Header = ({ activeHeading }) => {
                   <div>
                     <Link to="/profile">
                       <img
-                        src={`${backend_url}${user.avatar.url}`}
+                        src={`${user.avatar?.url}`}
                         alt=""
                         className="w-[80px] h-[80px] rounded-full border-[3px] border-[#0eae88]"
                       />

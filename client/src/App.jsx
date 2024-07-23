@@ -23,7 +23,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
-import { ShopCreateProduct, ShopDashboardPage, ShopHomePage, ShopAllProducts } from "./routes/ShopRoutes.js";
+import { ShopCreateProduct, ShopDashboardPage, ShopHomePage, ShopAllProducts, ShopPreviewPage } from "./routes/ShopRoutes.js";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx"
 import { getAllProducts } from "./redux/actions/product.js";
@@ -121,6 +121,11 @@ const App = () => {
               <ShopAllProducts />
             </SellerProtectedRoute>
           } />
+
+
+<Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+
+
           </Routes>
         </>
   );
