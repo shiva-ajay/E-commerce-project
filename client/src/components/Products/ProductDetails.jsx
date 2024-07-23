@@ -9,6 +9,12 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { getAllProductsShop } from "../../redux/actions/product";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/actions/wishlist";
+import { addTocart } from "../../redux/actions/cart";
+import { toast } from "react-toastify";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
@@ -16,11 +22,20 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const { cart } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch (getAllProductsShop(data && data?.shop._id));
-  }, [dispatch, data]);
+    dispatch(getAllProductsShop(data && data?.shop._id));
+    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [data, wishlist]);
+
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -32,10 +47,33 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?fbsfbnkndovioivrdivoidfnv");
+
+
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data));
   };
-  console.log(data);
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addTocart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
+
 
   return (
     <div className="bg-white">
@@ -99,11 +137,11 @@ const ProductDetails = ({ data }) => {
                   </button>
                 </div>
                 <div>
-                    {click ? (
+                {click ? (
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => removeFromWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Remove from wishlist"
                       />
@@ -111,7 +149,8 @@ const ProductDetails = ({ data }) => {
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => addToWishlistHandler(data)}
+                        color={click ? "red" : "#333"}
                         title="Add to wishlist"
                       />
                     )}
@@ -145,7 +184,7 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
-                  onClick={handleMessageSubmit}
+           
                 >
                   <span className="text-white flex items-center">
                     Send Message <AiOutlineMessage className="ml-1" />
