@@ -31,6 +31,7 @@ import {
   ShopPreviewPage,
   ShopAllOrders,
   ShopOrderDetails,
+  ShopWithDrawMoneyPage,
 } from "./routes/ShopRoutes.js";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
@@ -165,6 +166,15 @@ const App = () => {
             <ProtectedRoute>
               <OrderDetailsPage />
             </ProtectedRoute>
+          }
+        />
+
+<Route
+          path="/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <ShopWithDrawMoneyPage />
+            </SellerProtectedRoute>
           }
         />
 

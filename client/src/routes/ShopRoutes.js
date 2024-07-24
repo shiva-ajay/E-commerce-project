@@ -5,6 +5,8 @@ import ShopAllProducts from "../pages/Shop/ShopAllProducts";
 import ShopPreviewPage from "../pages/Shop/ShopPreviewPage.jsx";
 import ShopAllOrders from "../pages/Shop/ShopAllOrders.jsx";
 import ShopOrderDetails from "../pages/Shop/ShopOrderDetails.jsx";
+import ShopWithDrawMoneyPage from "../pages/Shop/ShopWithDrawMoneyPage";
+
 
 export {
     ShopHomePage,
@@ -14,4 +16,5 @@ export {
     ShopPreviewPage,
     ShopAllOrders,
     ShopOrderDetails,
+    ShopWithDrawMoneyPage,
 }
