@@ -230,13 +230,13 @@ export const brandingData = [
       title: "Gifts",
       subTitle: "",
       image_Url:
-        "https://securecdn.pymnts.com/wp-content/uploads/2014/11/Gifts-Photo-700x489.jpg",
+        "https://i.pinimg.com/originals/e6/ca/04/e6ca041351dc34dca034ab39e0e18ea7.png",
     },
     {
       id: 7,
       title: "Pet Care",
       subTitle: "",
-      image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+      image_Url: "https://png.pngtree.com/png-vector/20220828/ourmid/pngtree-pets-cat-and-dog-vector-png-image_6127516.png",
     },
     {
       id: 8,
