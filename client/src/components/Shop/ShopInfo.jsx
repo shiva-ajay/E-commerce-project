@@ -79,7 +79,11 @@ const ShopInfo = ({isOwner}) => {
       </div>
       {isOwner && (
         <div className="py-3 px-4">
-          
+           <Link to="/dashboard">
+           <div className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}>
+            <span className="text-white">Go to dashboard</span>
+          </div>
+           </Link>
           <div className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
           onClick={logoutHandler}
           >

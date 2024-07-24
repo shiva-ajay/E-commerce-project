@@ -3,6 +3,8 @@ import ShopDashboardPage from "../pages/Shop/ShopDashboardPage";
 import ShopCreateProduct from "../pages/Shop/ShopCreateProduct";
 import ShopAllProducts from "../pages/Shop/ShopAllProducts";
 import ShopPreviewPage from "../pages/Shop/ShopPreviewPage.jsx";
+import ShopAllOrders from "../pages/Shop/ShopAllOrders.jsx";
+import ShopOrderDetails from "../pages/Shop/ShopOrderDetails.jsx";
 
 export {
     ShopHomePage,
@@ -10,4 +12,6 @@ export {
     ShopCreateProduct,
     ShopAllProducts,
     ShopPreviewPage,
+    ShopAllOrders,
+    ShopOrderDetails,
 }

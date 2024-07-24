@@ -28,15 +28,14 @@ import {
   ShopHomePage,
   ShopAllProducts,
   ShopPreviewPage,
+  ShopAllOrders,
+  ShopOrderDetails,
 } from "./routes/ShopRoutes.js";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
 import { getAllProducts } from "./redux/actions/product.js";
 
-
 const App = () => {
-
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,8 +46,6 @@ const App = () => {
 
   return (
     <>
-  
-
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -135,13 +132,31 @@ const App = () => {
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
 
         <Route
-              path="/payment"
-              element={
-                <ProtectedRoute>
-                  <PaymentPage />
-                </ProtectedRoute>
-              } />
+          path="/payment"
+          element={
+            <ProtectedRoute>
+              <PaymentPage />
+            </ProtectedRoute>
+          }
+        />
 
+        <Route
+          path="/dashboard-orders"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllOrders />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopOrderDetails />
+            </SellerProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

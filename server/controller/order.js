@@ -42,3 +42,39 @@ export const createOrder = async (req, res) => {
 }
 
 
+// get all orders of user
+
+export const usersOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ "user._id": req.params.userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+// get all orders of seller
+
+export const sellersOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({
+      "cart.shopId": req.params.shopId,
+    }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

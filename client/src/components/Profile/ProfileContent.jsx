@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/styles";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineArrowRight, AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,6 +15,8 @@ import {
 } from "../../redux/actions/user";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
+
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -195,18 +197,13 @@ const ProfileContent = ({ active }) => {
 
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "7463hvbfhbfbrtr28820221",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
+  const { user } = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -217,10 +214,9 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
+        return params.value === "Delivered" ? "greenColor" : "redColor";
+      }
+      
     },
     {
       field: "itemsQty",
@@ -265,9 +261,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 
