@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/styles";
 import { BsFillBagFill } from "react-icons/bs";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { server } from "../../server";
-import axios from "axios";
-import { toast } from "react-toastify";
+import styles from "../styles/styles";
+import { getAllOrdersOfUser } from "../redux/actions/order";
 
-const OrderDetails = () => {
-  const { orders, isLoading } = useSelector((state) => state.order);
-  const { seller } = useSelector((state) => state.seller);
+
+const UserOrderDetails = () => {
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    dispatch(getAllOrdersOfUser(user._id));
+  }, [dispatch,user._id]);
 
   const data = orders && orders.find((item) => item._id === id);
-
 
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -28,13 +26,6 @@ const OrderDetails = () => {
           <BsFillBagFill size={30} color="crimson" />
           <h1 className="pl-2 text-[25px]">Order Details</h1>
         </div>
-        <Link to="/dashboard-orders">
-          <div
-            className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
-          >
-            Order List
-          </div>
-        </Link>
       </div>
 
       <div className="w-full flex items-center justify-between pt-6">
@@ -50,7 +41,8 @@ const OrderDetails = () => {
       <br />
       <br />
       {data &&
-        data?.cart.map((item, index) => (
+        data?.cart.map((item, index) => {
+          return(
           <div className="w-full flex items-start mb-5">
             <img
               src={`${item.images[0]?.url}`}
@@ -64,7 +56,10 @@ const OrderDetails = () => {
               </h5>
             </div>
           </div>
-        ))}
+          )
+         })}
+
+      
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
@@ -85,17 +80,12 @@ const OrderDetails = () => {
           <h4 className=" text-[20px]">{data?.shippingAddress.city}</h4>
           <h4 className=" text-[20px]">{data?.user?.phoneNumber}</h4>
         </div>
-        <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Payment Info:</h4>
-          <h4>
-            Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
-          </h4>
-        </div>
+        
       </div>
+     
       <br />
-      </div>
+    </div>
   );
 };
 
-export default OrderDetails;
+export default UserOrderDetails;
