@@ -1,2 +1,2 @@
-export const server = "http://localhost:8000/api/v1";
+export const server = "https://e-commerce-project-djkt.onrender.com/api/v1";
 export const backend_url = "http://localhost:8000/";
