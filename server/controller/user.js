@@ -38,7 +38,7 @@ export const createUser = async (req, res) => {
     console.log("Creating user controller with data:", user);
 
     const activationToken = createActivationToken(user);
-    const activationUrl = `${process.env.FRONTEND_URL}/activation/${activationToken}`;
+    const activationUrl = `${process.env.FRONTEND_URL}/activation/${activationToken}`;;
 
     try {
       await sendMail({

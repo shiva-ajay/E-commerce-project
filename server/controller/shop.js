@@ -43,7 +43,7 @@ export const createShop = async (req, res) => {
     };
 
     const activationToken = createActivationToken(seller);
-    const activationUrl = `http://localhost:5173/shop/activation/${activationToken}`;
+    const activationUrl = `${process.env.FRONTEND_URL}/shop/activation/${activationToken}`;
 
     try {
       await sendMail({

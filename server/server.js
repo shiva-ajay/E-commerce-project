@@ -24,7 +24,7 @@ cloudinary.config({
 
 
 const corsOptions = {
-    origin: 'http://localhost:5173', // Your frontend's origin
+    origin: process.env.FRONTEND_ORIGIN, // Your frontend's origin
     credentials: true, // Enable credentials
 };
 
