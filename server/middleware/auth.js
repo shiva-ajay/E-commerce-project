@@ -32,7 +32,7 @@ export const isSeller = async (req, res, next) => {
     const { seller_token } = req.cookies;
 
     if (!seller_token) {
-      return res.status(401).json({ message: "Please login to continue" });
+      return res.status(401).json({ message: "Please login to continue (seller)" });
     }
 
     const decoded = jwt.verify(seller_token, process.env.JWT_SECRET_KEY);

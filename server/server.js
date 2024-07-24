@@ -8,6 +8,7 @@ import shopRoute from './routes/shopRoute.js';
 import productRoute from './routes/productRoute.js';
 import paymentRoute from './routes/paymentRoute.js';
 import orderRoute from './routes/orderRoute.js';
+import subscriptionRoute from './routes/subscriptionRoute.js'
 import { v2 as cloudinary } from "cloudinary";
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api/v1/shop", shopRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/payment", paymentRoute);
 app.use("/api/v1/order", orderRoute);
+app.use("/api/v1/plan", subscriptionRoute);
 
 app.get('/', (req, res) => {
     res.send("API Working");

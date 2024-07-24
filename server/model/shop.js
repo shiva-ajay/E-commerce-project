@@ -46,6 +46,10 @@ const shopSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  is_subscribed:{
+    type: Boolean,
+    default: false
+  },
   
   createdAt: {
     type: Date,
@@ -53,7 +57,7 @@ const shopSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordTime: Date,
-});
+},{timestamps: true});
 
 // Hash password
 shopSchema.pre("save", async function (next) {
